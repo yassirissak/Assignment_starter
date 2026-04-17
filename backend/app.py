@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
 
@@ -22,7 +23,10 @@ students = [
      Student(2, "Mike John", "Cyber Security")
 ]
 
-
+#home
+@app.route("/")
+def home():
+    return "home page"
 #  CRUD students
 # Create
 @app.route('/student', methods=["POST"])
@@ -51,10 +55,10 @@ def get_student(id):
 def update_student(id):
     data = request.json
     for student in students:
-        if student.id == id:
-            student.name = data.get("name", student.name)
-            student.course = data.get("course", student.course)
-            return jsonify(student.to_dict())
+     if student.id == id:
+        student.name = data.get("name", student.name)
+        student.course = data.get("course", student.course)
+        return jsonify(student.to_dict())
     return jsonify({"Error": "Student not found"}), 404
 
  #delete studnets
@@ -64,6 +68,8 @@ def delete_student (id):
         if student.id == id:
             students.remove(student)
             return jsonify({"message": "Student deleted successfully"})
-    return jsonify({"Error": "Student not found"}), 404   
+    return jsonify({"Error": "Student not found"}), 404 
+
+CORS(app)
 # dynamic routes
 # UPDATE, DELETE, GET individual learner
